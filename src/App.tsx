@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import logo from './logo.svg'
+import './App.css'
+import { EventStreamContext, stream } from './events'
+import { ClickSource } from './demo/ClickSource'
+import { CounterProvider } from './demo/CounterState'
+import CounterDisplay from './demo/CounterDisplay'
+import { CountdownManager } from './demo/Countdown'
+import { EventLogger } from './demo/EventLogger'
+import { ExampleProcess } from './demo/ExampleProcess'
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <EventStreamContext.Provider value={stream}>
+      <CountdownManager />
+      <ClickSource />
+      <ExampleProcess output="Example process!" />
+
+      <div className="App">
+        <header className="App-header">
+          <CounterProvider>
+            <CounterDisplay />
+          </CounterProvider>
+          <EventLogger />
+        </header>
+      </div>
+    </EventStreamContext.Provider>
+  )
 }
 
-export default App;
+export default App
