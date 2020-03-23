@@ -1,29 +1,12 @@
-import {
-  default as React,
-  createContext,
-  useContext,
-  useReducer,
-  useMemo,
-  useEffect,
-} from 'react'
-import { useEmit, useStreamCallback } from '@twopm/use-stream/lib'
-import { EventStreamContext } from '../events'
-import { filter } from 'rxjs/operators'
+import { createContainer } from 'unstated-next'
+import { useReducer } from 'react'
 
-export type CounterState = {
+type CounterState = {
   count: number
 }
+type CounterAction = 'increment' | 'decrement'
 
-export const initialState: CounterState = {
-  count: 0,
-}
-
-export type CounterAction = 'increment' | 'decrement'
-
-export const reducer = (
-  state: CounterState,
-  action: CounterAction
-): CounterState => {
+const reducer = (state: CounterState, action: CounterAction): CounterState => {
   switch (action) {
     case 'increment':
       return {
@@ -42,61 +25,12 @@ export const reducer = (
   }
 }
 
-// Context, globally available
+const useCounter = (initial = 0) => {
+  const [state, dispatch] = useReducer(reducer, { count: initial })
+  const increment = () => dispatch('increment')
+  const decrement = () => dispatch('decrement')
 
-type CounterContextValue = {
-  state: CounterState
-  increment: () => void
-  decrement: () => void
+  return { state, increment, decrement }
 }
 
-const CounterContext = createContext<CounterContextValue>({
-  state: initialState,
-  increment: () => {},
-  decrement: () => {},
-})
-
-export const useCounter = () => {
-  const context = useContext(CounterContext)
-
-  if (!context) {
-    throw new Error(`useCounter must be used within a CounterProvider`)
-  }
-
-  return context
-}
-
-export const CounterProvider = (props: any) => {
-  const [state, dispatch] = useReducer(reducer, initialState)
-  const emit = useEmit(EventStreamContext)
-
-  useStreamCallback(
-    EventStreamContext,
-    s =>
-      s.pipe(filter(x => x.type === 'mouseClicked')).subscribe(_ => {
-        dispatch('increment')
-      }),
-    [dispatch]
-  )
-
-  useEffect(() => {
-    if (state.count === 5) {
-      emit({
-        type: 'countdown/started',
-        duration: 3,
-        onComplete: { type: 'process/started' },
-      })
-    }
-  }, [state, emit])
-
-  const value = useMemo(
-    () => ({
-      state,
-      increment: () => dispatch('increment'),
-      decrement: () => dispatch('decrement'),
-    }),
-    [state, dispatch]
-  )
-
-  return <CounterContext.Provider value={value} {...props} />
-}
+export const Counter = createContainer(useCounter)

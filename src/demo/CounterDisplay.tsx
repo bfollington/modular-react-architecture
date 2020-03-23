@@ -1,12 +1,12 @@
 import React from 'react'
-import { useCounter } from './CounterState'
+import { Counter } from './CounterState'
 
 const CounterDisplay = () => {
-  const { state } = useCounter()
+  const counter = Counter.useContainer()
 
   return (
     <>
-      <label>Click count: {state.count}</label>
+      <label>Click count: {counter.state.count}</label>
     </>
   )
 }

@@ -3,24 +3,30 @@ import logo from './logo.svg'
 import './App.css'
 import { EventStreamContext, stream } from './events'
 import { ClickSource } from './demo/ClickSource'
-import { CounterProvider } from './demo/CounterState'
+import { CounterManager } from './demo/CounterManager'
 import CounterDisplay from './demo/CounterDisplay'
-import { CountdownManager } from './demo/Countdown'
+import { CountdownManager } from './demo/CountdownManager'
 import { EventLogger } from './demo/EventLogger'
 import { ExampleProcess } from './demo/ExampleProcess'
+import { Counter } from './demo/CounterState'
+import { Countdown } from './demo/CountdownState'
 
 const App: React.FC = () => {
   return (
     <EventStreamContext.Provider value={stream}>
-      <CountdownManager />
+      <Countdown.Provider>
+        <CountdownManager />
+      </Countdown.Provider>
       <ClickSource />
       <ExampleProcess output="Example process!" />
 
       <div className="App">
         <header className="App-header">
-          <CounterProvider>
-            <CounterDisplay />
-          </CounterProvider>
+          <Counter.Provider>
+            <CounterManager>
+              <CounterDisplay />
+            </CounterManager>
+          </Counter.Provider>
           <EventLogger />
         </header>
       </div>
