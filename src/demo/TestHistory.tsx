@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useSessionHistory } from './SessionHistoryState'
 import { useSessionHistoryManager } from './useSessionHistoryManager'
-import { useSyncProcess } from './useSyncProcess'
+import { useSyncProcess, startSync } from './useSyncProcess'
 import { useEventStream } from '../events'
 
 export const TestHistory = () => {
@@ -10,14 +10,12 @@ export const TestHistory = () => {
 
   const sessionHistory = useSessionHistory()
   const { emit } = useEventStream()
-  const onSyncRequested = React.useCallback(
-    () => emit({ type: 'process/sync/started' }),
-    [emit]
-  )
+  const onSyncRequested = React.useCallback(() => emit(startSync()), [emit])
 
   return (
     <div>
-      <div>Sessions: {JSON.stringify(sessionHistory.sessions)}</div>
+      <div>Sessions: {JSON.stringify(sessionHistory.state.sessions)}</div>
+      <div>Total Duration {sessionHistory.totalDuration}</div>
       <button onClick={onSyncRequested}>Sync Sessions</button>
     </div>
   )

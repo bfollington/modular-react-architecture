@@ -4,13 +4,13 @@ import { EventStreamContext } from '../events'
 import { useRetry } from './processManager'
 import { Session, SessionHistory } from './SessionHistoryState'
 
-const start = () => ({ type: 'process/sync/started' } as const)
+export const startSync = () => ({ type: 'process/sync/started' } as const)
 const restart = () => ({ type: 'process/sync/restarted' } as const)
 const complete = () => ({ type: 'process/sync/completed' } as const)
 const fail = () => ({ type: 'process/sync/failed' } as const)
 
 export type SyncProcessActions = ReturnType<
-  typeof start | typeof restart | typeof complete | typeof fail
+  typeof startSync | typeof restart | typeof complete | typeof fail
 >
 
 type SyncData = {
@@ -20,7 +20,7 @@ type SyncData = {
 
 export const useSyncProcess = () => {
   const emit = useEmit(EventStreamContext)
-  useRetry(start(), complete(), fail(), restart(), 3)
+  useRetry(startSync(), complete(), fail(), restart(), 3)
 
   const sessionHistory = SessionHistory.useContainer()
 

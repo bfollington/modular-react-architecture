@@ -8,11 +8,9 @@ import {
   unpauseTimer,
 } from './TimerState'
 import { useTimerManager } from './useTimerManager'
-import { useExampleProcess } from './useExampleProcess'
 
 export const TestApp = () => {
   useTimerManager()
-  useExampleProcess('Some output!')
 
   const { emit } = useEventStream()
   const onStartTimer = React.useCallback(() => emit(startTimer(10)), [emit])

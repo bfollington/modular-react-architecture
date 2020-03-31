@@ -3,13 +3,11 @@ import {
   makeEventStreamContext,
   useStream,
 } from '@twopm/use-stream'
-import { ProcessAction } from './demo/useExampleProcess'
 import { SyncProcessActions } from './demo/useSyncProcess'
 import { TimerEvents } from './demo/TimerState'
 
 export type Events =
   | TimerEvents
-  | ProcessAction
   | { type: 'session/completed' }
   | SyncProcessActions
 

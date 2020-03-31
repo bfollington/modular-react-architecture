@@ -1,4 +1,4 @@
-import { useReducer } from 'react'
+import { useReducer, useMemo } from 'react'
 import { createContainer } from 'unstated-next'
 
 export type Session = {
@@ -36,8 +36,18 @@ const useSessionHistoryInner = () => {
   const loadSessionHistory = (sessions: Session[]) =>
     dispatch(actions.loadSessionHistory(sessions))
 
+  const totalDuration = useMemo(
+    () =>
+      state.sessions.reduce(
+        (duration, session) => duration + session.duration,
+        0
+      ),
+    [state]
+  )
+
   return {
     state,
+    totalDuration,
     addSessionToHistory,
     loadSessionHistory,
   }
@@ -45,7 +55,13 @@ const useSessionHistoryInner = () => {
 
 export const SessionHistory = createContainer(useSessionHistoryInner)
 
-export const useSessionHistory = () => SessionHistory.useContainer().state
+export const useSessionHistory = () => {
+  const s = SessionHistory.useContainer()
+  return {
+    state: s.state,
+    totalDuration: s.totalDuration,
+  }
+}
 
 const reducer = (
   state: SessionHistoryState,
