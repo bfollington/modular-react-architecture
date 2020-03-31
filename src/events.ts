@@ -3,8 +3,8 @@ import {
   makeEventStreamContext,
   useStream,
 } from '@twopm/use-stream'
-import { SyncProcessActions } from './demo/useSyncProcess'
-import { TimerEvents } from './demo/TimerState'
+import { SyncProcessActions } from './demo/sessionHistory/useSyncProcess'
+import { TimerEvents } from './demo/timer/useTimerManager'
 
 export type Events =
   | TimerEvents

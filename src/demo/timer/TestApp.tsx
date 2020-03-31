@@ -1,13 +1,13 @@
 import * as React from 'react'
-import { useEventStream } from '../events'
+import { useEventStream } from '../../events'
+import { useTimer } from './TimerState'
 import {
-  cancelTimer,
-  pauseTimer,
+  useTimerManager,
   startTimer,
-  useTimer,
+  pauseTimer,
   unpauseTimer,
-} from './TimerState'
-import { useTimerManager } from './useTimerManager'
+  cancelTimer,
+} from './useTimerManager'
 
 export const TestApp = () => {
   useTimerManager()

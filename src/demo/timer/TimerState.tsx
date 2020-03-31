@@ -1,21 +1,6 @@
-import { Events } from '../events'
+import { Events } from '../../events'
 import { useReducer } from 'react'
 import { createContainer } from 'unstated-next'
-
-export type TimerEvents =
-  | { type: 'timer/started'; duration: number; onComplete?: Events }
-  | ReturnType<typeof pauseTimer>
-  | ReturnType<typeof unpauseTimer>
-  | ReturnType<typeof cancelTimer>
-  | ReturnType<typeof completeTimer>
-
-export const startTimer = (duration: number, onComplete?: Events) =>
-  ({ type: 'timer/started', duration, onComplete } as const)
-export const pauseTimer = () => ({ type: 'timer/paused' } as const)
-export const unpauseTimer = () => ({ type: 'timer/unpaused' } as const)
-export const cancelTimer = () => ({ type: 'timer/cancelled' } as const)
-export const completeTimer = (finalDuration: number) =>
-  ({ type: 'timer/completed', finalDuration } as const)
 
 export type TimerState = {
   duration: number

@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useSessionHistory } from './SessionHistoryState'
 import { useSessionHistoryManager } from './useSessionHistoryManager'
 import { useSyncProcess, startSync } from './useSyncProcess'
-import { useEventStream } from '../events'
+import { useEventStream } from '../../events'
 
 export const TestHistory = () => {
   useSessionHistoryManager()

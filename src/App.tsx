@@ -1,11 +1,11 @@
 import React from 'react'
 import './App.css'
 import { EventLogger } from './demo/EventLogger'
-import { Timer } from './demo/TimerState'
+import { Timer } from './demo/timer/TimerState'
 import { EventStreamContext, stream } from './events'
-import { TestApp } from './demo/TestApp'
-import { SessionHistory } from './demo/SessionHistoryState'
-import { TestHistory } from './demo/TestHistory'
+import { TestApp } from './demo/timer/TestApp'
+import { SessionHistory } from './demo/sessionHistory/SessionHistoryState'
+import { TestHistory } from './demo/sessionHistory/TestHistory'
 
 const App: React.FC = () => {
   return (
