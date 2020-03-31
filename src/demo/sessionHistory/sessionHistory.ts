@@ -38,10 +38,7 @@ const useSessionHistoryInner = () => {
 
   const totalDuration = useMemo(
     () =>
-      state.sessions.reduce(
-        (duration, session) => duration + session.duration,
-        0
-      ),
+      state.sessions.map(s => s.duration).reduce((acc, val) => acc + val, 0),
     [state]
   )
 
