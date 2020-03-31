@@ -18,18 +18,28 @@ export const initialState: SessionHistoryState = {
 const actions = {
   addSessionToHistory: (timestamp: number, duration: number) =>
     ({ type: 'addSession', timestamp, duration } as const),
+  loadSessionHistory: (sessions: Session[]) =>
+    ({
+      type: 'loadSessions',
+      sessions,
+    } as const),
 }
 
-type Actions = ReturnType<typeof actions.addSessionToHistory>
+type Actions =
+  | ReturnType<typeof actions.addSessionToHistory>
+  | ReturnType<typeof actions.loadSessionHistory>
 
 const useSessionHistoryInner = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const addSessionToHistory = (timestamp: number, duration: number) =>
     dispatch(actions.addSessionToHistory(timestamp, duration))
+  const loadSessionHistory = (sessions: Session[]) =>
+    dispatch(actions.loadSessionHistory(sessions))
 
   return {
     state,
     addSessionToHistory,
+    loadSessionHistory,
   }
 }
 
@@ -53,6 +63,12 @@ const reducer = (
             duration: action.duration,
           },
         ],
+      }
+
+    case 'loadSessions':
+      return {
+        ...state,
+        sessions: action.sessions,
       }
 
     default:
