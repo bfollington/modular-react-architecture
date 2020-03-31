@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useEventStream } from '../../events'
-import { useTimer } from './TimerState'
+import { useTimer } from './timer'
 import {
   useTimerManager,
   startTimer,

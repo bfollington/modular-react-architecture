@@ -2,7 +2,7 @@ import { useEmit, useStreamCallback } from '@twopm/use-stream/lib'
 import { useEffect } from 'react'
 import { filter } from 'rxjs/operators'
 import { EventStreamContext, Events } from '../../events'
-import { Timer } from './TimerState'
+import { Timer } from './timer'
 
 export type TimerEvents =
   | { type: 'timer/started'; duration: number; onComplete?: Events }

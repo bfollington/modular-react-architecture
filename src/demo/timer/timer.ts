@@ -62,10 +62,6 @@ const useTimerInner = () => {
   }
 }
 
-export const Timer = createContainer(useTimerInner)
-
-export const useTimer = () => Timer.useContainer().state
-
 const reducer = (state: TimerState, action: Actions): TimerState => {
   switch (action.type) {
     case 'start':
@@ -120,3 +116,7 @@ const reducer = (state: TimerState, action: Actions): TimerState => {
       return state
   }
 }
+
+export const Timer = createContainer(useTimerInner)
+
+export const useTimer = () => Timer.useContainer().state

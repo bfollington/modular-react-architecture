@@ -53,16 +53,6 @@ const useSessionHistoryInner = () => {
   }
 }
 
-export const SessionHistory = createContainer(useSessionHistoryInner)
-
-export const useSessionHistory = () => {
-  const s = SessionHistory.useContainer()
-  return {
-    state: s.state,
-    totalDuration: s.totalDuration,
-  }
-}
-
 const reducer = (
   state: SessionHistoryState,
   action: Actions
@@ -89,5 +79,15 @@ const reducer = (
 
     default:
       return state
+  }
+}
+
+export const SessionHistory = createContainer(useSessionHistoryInner)
+
+export const useSessionHistory = () => {
+  const s = SessionHistory.useContainer()
+  return {
+    state: s.state,
+    totalDuration: s.totalDuration,
   }
 }

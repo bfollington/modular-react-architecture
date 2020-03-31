@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useSessionHistory } from './SessionHistoryState'
+import { useSessionHistory } from './sessionHistory'
 import { useSessionHistoryManager } from './useSessionHistoryManager'
 import { useSyncProcess, startSync } from './useSyncProcess'
 import { useEventStream } from '../../events'

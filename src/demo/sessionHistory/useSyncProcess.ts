@@ -2,7 +2,7 @@ import { useEmit, useStreamCallback } from '@twopm/use-stream/lib'
 import { delay, filter } from 'rxjs/operators'
 import { EventStreamContext } from '../../events'
 import { useRetry } from '../processManager'
-import { Session, SessionHistory } from './SessionHistoryState'
+import { Session, SessionHistory } from './sessionHistory'
 
 export const startSync = () => ({ type: 'process/sync/started' } as const)
 const restart = () => ({ type: 'process/sync/restarted' } as const)

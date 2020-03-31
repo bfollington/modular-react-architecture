@@ -1,7 +1,7 @@
 import { useEmit, useStreamCallback } from '@twopm/use-stream/lib'
 import { filter } from 'rxjs/operators'
 import { EventStreamContext } from '../../events'
-import { SessionHistory } from './SessionHistoryState'
+import { SessionHistory } from './sessionHistory'
 
 export const useSessionHistoryManager = () => {
   const sessionHistory = SessionHistory.useContainer()
