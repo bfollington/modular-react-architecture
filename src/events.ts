@@ -1,15 +1,13 @@
-import { makeEventStream, makeEventStreamContext } from '@twopm/use-stream'
-import { CountdownEvents } from './demo/CountdownState'
-import { ProcessAction } from './demo/ExampleProcess'
+import {
+  makeEventStream,
+  makeEventStreamContext,
+  useStream,
+} from '@twopm/use-stream'
+import { ProcessAction } from './demo/useExampleProcess'
+import { TimerEvents } from './demo/TimerState'
 
-export type MouseClicked = { type: 'mouseClicked' }
-export type MouseClicked10Times = { type: 'mouseClicked10Times' }
-
-export type Events =
-  | MouseClicked
-  | MouseClicked10Times
-  | CountdownEvents
-  | ProcessAction
+export type Events = TimerEvents | ProcessAction | { type: 'session/completed' }
 
 export const stream = makeEventStream<Events>('main')
 export const EventStreamContext = makeEventStreamContext<Events>()
+export const useEventStream = () => useStream(EventStreamContext)

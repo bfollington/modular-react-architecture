@@ -1,5 +1,4 @@
 import { useEmit, useStreamCallback } from '@twopm/use-stream/lib'
-import { default as React } from 'react'
 import { filter } from 'rxjs/operators'
 import { EventStreamContext } from '../events'
 import { useRetry } from './processManager'
@@ -7,20 +6,16 @@ import { useRetry } from './processManager'
 export type ProcessState = 'initial' | 'loading' | 'complete' | 'failed'
 export const initialState: ProcessState = 'initial'
 
-const start = () => ({ type: 'process/started' })
-const restart = () => ({ type: 'process/restarted' })
-const complete = () => ({ type: 'process/completed' })
-const fail = () => ({ type: 'process/failed' })
+const start = () => ({ type: 'process/started' } as const)
+const restart = () => ({ type: 'process/restarted' } as const)
+const complete = () => ({ type: 'process/completed' } as const)
+const fail = () => ({ type: 'process/failed' } as const)
 
 export type ProcessAction = ReturnType<
   typeof start | typeof restart | typeof complete | typeof fail
 >
 
-type Props = {
-  output: string
-}
-
-export const ExampleProcess = ({ output }: Props) => {
+export const useExampleProcess = (output: string) => {
   const emit = useEmit(EventStreamContext)
 
   useRetry(start(), complete(), fail(), restart(), 3)
@@ -46,6 +41,4 @@ export const ExampleProcess = ({ output }: Props) => {
         }),
     [emit]
   )
-
-  return <></>
 }
