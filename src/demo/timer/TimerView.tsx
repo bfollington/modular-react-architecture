@@ -9,7 +9,7 @@ import {
   cancelTimer,
 } from './useTimerManager'
 
-export const TestApp = () => {
+export const TimerView = () => {
   useTimerManager()
 
   const { emit } = useEventStream()

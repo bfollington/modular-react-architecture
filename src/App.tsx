@@ -1,11 +1,11 @@
 import React from 'react'
 import './App.css'
 import { EventLogger } from './demo/EventLogger'
-import { Timer } from './demo/timer/TimerState'
-import { EventStreamContext, stream } from './events'
-import { TestApp } from './demo/timer/TestApp'
+import { HistoryView } from './demo/sessionHistory/HistoryView'
 import { SessionHistory } from './demo/sessionHistory/SessionHistoryState'
-import { TestHistory } from './demo/sessionHistory/TestHistory'
+import { Timer } from './demo/timer/TimerState'
+import { TimerView } from './demo/timer/TimerView'
+import { EventStreamContext, stream } from './events'
 
 const App: React.FC = () => {
   return (
@@ -13,10 +13,10 @@ const App: React.FC = () => {
       <div className="App">
         <header className="App-header">
           <Timer.Provider>
-            <TestApp />
+            <TimerView />
           </Timer.Provider>
           <SessionHistory.Provider>
-            <TestHistory />
+            <HistoryView />
           </SessionHistory.Provider>
           <EventLogger />
         </header>

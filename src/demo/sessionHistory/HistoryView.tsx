@@ -4,7 +4,7 @@ import { useSessionHistoryManager } from './useSessionHistoryManager'
 import { useSyncProcess, startSync } from './useSyncProcess'
 import { useEventStream } from '../../events'
 
-export const TestHistory = () => {
+export const HistoryView = () => {
   useSessionHistoryManager()
   useSyncProcess()
 
