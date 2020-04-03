@@ -4,14 +4,22 @@ import { EventStreamContext } from '../../events'
 import { useRetry } from '../processManager'
 import { Session, SessionHistory } from './sessionHistory'
 
-export const startSync = () => ({ type: 'process/sync/started' } as const)
+const start = () => ({ type: 'process/sync/started' } as const)
 const restart = () => ({ type: 'process/sync/restarted' } as const)
 const complete = () => ({ type: 'process/sync/completed' } as const)
-const fail = () => ({ type: 'process/sync/failed' } as const)
+const fail = (e: any) => ({ type: 'process/sync/failed', error: e } as const)
+
+// An example of some business logic that kicks off an async process
+// This process "syncs" the app data with localStorage, simulating a network request
+// It has a fake delay and will randomly fail to test the retry logic
 
 export type SyncProcessActions = ReturnType<
-  typeof startSync | typeof restart | typeof complete | typeof fail
+  typeof start | typeof restart | typeof complete | typeof fail
 >
+
+export const commands = {
+  start,
+}
 
 type SyncData = {
   sessions: Session[]
@@ -20,7 +28,7 @@ type SyncData = {
 
 export const useSyncProcess = () => {
   const emit = useEmit(EventStreamContext)
-  useRetry(startSync(), complete(), fail(), restart(), 3)
+  useRetry(start(), complete(), fail({}), restart(), 3)
 
   const sessionHistory = SessionHistory.useContainer()
 
@@ -29,11 +37,7 @@ export const useSyncProcess = () => {
     s =>
       s
         .pipe(
-          filter(
-            x =>
-              x.type === 'process/sync/started' ||
-              x.type === 'process/sync/restarted'
-          ),
+          filter(x => x.type === 'process/sync/started' || x.type === 'process/sync/restarted'),
           delay(1000)
         )
         .subscribe(_ => {
@@ -46,14 +50,13 @@ export const useSyncProcess = () => {
               const newLocalItems = sessionHistory.state.sessions.filter(
                 x => !syncData.sessions.some(y => x.id === y.id)
               )
-              console.log(
-                'local items',
-                sessionHistory.state.sessions,
-                newLocalItems
-              )
+
+              console.log('local items', sessionHistory.state.sessions, newLocalItems)
+
               loaded = syncData.sessions
                 .concat(newLocalItems)
                 .sort((a, b) => a.timestamp - b.timestamp)
+
               sessionHistory.loadSessionHistory(loaded)
             }
 
@@ -65,9 +68,13 @@ export const useSyncProcess = () => {
               } as SyncData)
             )
 
-            emit({ type: 'process/sync/completed' })
-          } catch {
-            emit({ type: 'process/sync/failed' })
+            if (Math.random() < 0.3) {
+              throw new Error('Random failure!')
+            }
+
+            emit(complete())
+          } catch (e) {
+            emit(fail(e))
           }
         }),
     [emit, sessionHistory]

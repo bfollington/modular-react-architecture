@@ -2,6 +2,11 @@ import { Events } from '../../events'
 import { useReducer } from 'react'
 import { createContainer } from 'unstated-next'
 
+// This is what I would refer to as a module of the application
+// It contains a slice of state, a set of actions possible to update that state and a reducer to combine the two
+// It is accessible using a hook for read-only (useTimer()) or read-write (Timer.useContainer())
+// The internals of this module should, mostly, be ignored after being established
+
 export type TimerState = {
   duration: number
   timer: number
@@ -20,16 +25,16 @@ export const initialState: TimerState = {
 
 const actions = {
   start: (duration: number, onComplete?: Events) =>
-    ({ type: 'start', duration, onComplete } as const),
-  cancel: () => ({ type: 'cancel' } as const),
-  tick: () => ({ type: 'tick' } as const),
+    ({ type: 'started', duration, onComplete } as const),
+  cancel: () => ({ type: 'cancelled' } as const),
+  tick: (deltaTime: number) => ({ type: 'ticked', deltaTime } as const),
   reset: () => ({ type: 'reset' } as const),
-  pause: () => ({ type: 'pause' } as const),
-  unpause: () => ({ type: 'unpause' } as const),
-  complete: () => ({ type: 'complete' } as const),
+  pause: () => ({ type: 'paused' } as const),
+  unpause: () => ({ type: 'unpaused' } as const),
+  complete: () => ({ type: 'completed' } as const),
 }
 
-type Actions = ReturnType<
+type ActionTypes = ReturnType<
   | typeof actions.start
   | typeof actions.cancel
   | typeof actions.tick
@@ -44,7 +49,7 @@ const useTimerInner = () => {
   const start = (duration: number, onComplete?: Events) =>
     dispatch(actions.start(duration, onComplete))
   const cancel = () => dispatch(actions.cancel())
-  const tick = () => dispatch(actions.tick())
+  const tick = (deltaTime: number) => dispatch(actions.tick(deltaTime))
   const reset = () => dispatch(actions.reset())
   const pause = () => dispatch(actions.pause())
   const unpause = () => dispatch(actions.unpause())
@@ -62,9 +67,9 @@ const useTimerInner = () => {
   }
 }
 
-const reducer = (state: TimerState, action: Actions): TimerState => {
+const reducer = (state: TimerState, action: ActionTypes): TimerState => {
   switch (action.type) {
-    case 'start':
+    case 'started':
       return {
         ...state,
         timer: 0,
@@ -74,13 +79,13 @@ const reducer = (state: TimerState, action: Actions): TimerState => {
         onComplete: action.onComplete,
       }
 
-    case 'tick':
+    case 'ticked':
       return {
         ...state,
-        timer: state.timer + 1,
+        timer: state.timer + action.deltaTime,
       }
 
-    case 'cancel':
+    case 'cancelled':
       return {
         ...state,
         timer: 0,
@@ -88,7 +93,7 @@ const reducer = (state: TimerState, action: Actions): TimerState => {
         activeSession: false,
       }
 
-    case 'complete':
+    case 'completed':
       return {
         ...state,
         activeSession: false,
@@ -100,13 +105,13 @@ const reducer = (state: TimerState, action: Actions): TimerState => {
         timer: state.duration,
       }
 
-    case 'pause':
+    case 'paused':
       return {
         ...state,
         paused: true,
       }
 
-    case 'unpause':
+    case 'unpaused':
       return {
         ...state,
         paused: false,

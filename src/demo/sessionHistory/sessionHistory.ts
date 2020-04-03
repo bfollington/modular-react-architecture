@@ -17,10 +17,10 @@ export const initialState: SessionHistoryState = {
 
 const actions = {
   addSessionToHistory: (timestamp: number, duration: number) =>
-    ({ type: 'addSession', timestamp, duration } as const),
+    ({ type: 'sessionAddedToHistory', timestamp, duration } as const),
   loadSessionHistory: (sessions: Session[]) =>
     ({
-      type: 'loadSessions',
+      type: 'sessionHistoryLoaded',
       sessions,
     } as const),
 }
@@ -55,7 +55,7 @@ const reducer = (
   action: Actions
 ): SessionHistoryState => {
   switch (action.type) {
-    case 'addSession':
+    case 'sessionAddedToHistory':
       return {
         ...state,
         sessions: [
@@ -68,7 +68,7 @@ const reducer = (
         ],
       }
 
-    case 'loadSessions':
+    case 'sessionHistoryLoaded':
       return {
         ...state,
         sessions: action.sessions,

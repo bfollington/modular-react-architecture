@@ -34,13 +34,17 @@ export function useRetry(
   useStreamCallback(
     EventStreamContext,
     s =>
-      s.pipe(filter(x => x.type === failed.type)).subscribe(_ => {
-        console.log('process failed')
+      s.pipe(filter(x => x.type === failed.type)).subscribe(x => {
+        if (x.type !== 'process/sync/failed') return
+
+        console.log('process failed', x.error)
 
         if (retries < retryLimit) {
           console.log(`retrying (attempt ${retries + 1} of ${retryLimit})`)
           setRetries(retries + 1)
           emit(retry)
+        } else {
+          console.error('retry limit exceeded, process failed')
         }
       }),
     [retries, retryLimit, emit]
