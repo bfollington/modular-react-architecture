@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { filter } from 'rxjs/operators'
+import { filter, map } from 'rxjs/operators'
 import { Events, useEmit, useSubscribe } from '../../events'
 import { Timer } from './timer'
 
@@ -38,45 +38,55 @@ export const useTimerManager = () => {
 
   useSubscribe(
     s =>
-      s.pipe(filter(x => x.type === 'timer/started')).subscribe(e => {
-        if (e.type === 'timer/started') {
-          timer.start(e.duration, e.onComplete)
-        }
-      }),
+      s
+        .pipe(
+          filter(x => x.type === 'timer/started'),
+          map(x => x as ReturnType<typeof start>)
+        )
+        .subscribe(e => {
+          if (e.type === 'timer/started') {
+            timer.start(e.duration, e.onComplete)
+          }
+        }),
     [timer]
   )
 
   useSubscribe(
     s =>
-      s.pipe(filter(x => x.type === 'timer/started')).subscribe(e => {
-        if (e.type === 'timer/started') {
-          timer.start(e.duration, e.onComplete)
-        }
-      }),
+      s
+        .pipe(
+          filter(x => x.type === 'timer/paused'),
+          map(x => x as ReturnType<typeof pause>)
+        )
+        .subscribe(e => {
+          timer.pause()
+        }),
     [timer]
   )
 
   useSubscribe(
     s =>
-      s.pipe(filter(x => x.type === 'timer/paused')).subscribe(e => {
-        timer.pause()
-      }),
+      s
+        .pipe(
+          filter(x => x.type === 'timer/unpaused'),
+          map(x => x as ReturnType<typeof unpause>)
+        )
+        .subscribe(e => {
+          timer.unpause()
+        }),
     [timer]
   )
 
   useSubscribe(
     s =>
-      s.pipe(filter(x => x.type === 'timer/unpaused')).subscribe(e => {
-        timer.unpause()
-      }),
-    [timer]
-  )
-
-  useSubscribe(
-    s =>
-      s.pipe(filter(x => x.type === 'timer/cancelled')).subscribe(e => {
-        timer.cancel()
-      }),
+      s
+        .pipe(
+          filter(x => x.type === 'timer/cancelled'),
+          map(x => x as ReturnType<typeof cancel>)
+        )
+        .subscribe(e => {
+          timer.cancel()
+        }),
     [timer]
   )
 

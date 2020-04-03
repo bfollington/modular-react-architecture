@@ -1,6 +1,7 @@
-import { filter } from 'rxjs/operators'
+import { filter, map } from 'rxjs/operators'
 import { useEmit, useSubscribe } from '../../events'
 import { SessionHistory } from './sessionHistory'
+import { commands as Timer } from '../timer/useTimerManager'
 
 export const useSessionHistoryManager = () => {
   const sessionHistory = SessionHistory.useContainer()
@@ -8,12 +9,15 @@ export const useSessionHistoryManager = () => {
 
   useSubscribe(
     s =>
-      s.pipe(filter(x => x.type === 'timer/completed')).subscribe(e => {
-        if (e.type === 'timer/completed') {
+      s
+        .pipe(
+          filter(x => x.type === 'timer/completed'),
+          map(x => x as ReturnType<typeof Timer.complete>)
+        )
+        .subscribe(e => {
           sessionHistory.addSessionToHistory(new Date().getTime(), e.finalDuration)
           emit({ type: 'session/completed' })
-        }
-      }),
+        }),
     [sessionHistory]
   )
 }
