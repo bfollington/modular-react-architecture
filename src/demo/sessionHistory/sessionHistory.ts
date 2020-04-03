@@ -29,25 +29,6 @@ type Actions =
   | ReturnType<typeof actions.addSessionToHistory>
   | ReturnType<typeof actions.loadSessionHistory>
 
-export const SessionHistory = createContainer(() => {
-  const [state, dispatch] = useReducer(reducer, initialState)
-  const addSessionToHistory = (timestamp: number, duration: number) =>
-    dispatch(actions.addSessionToHistory(timestamp, duration))
-  const loadSessionHistory = (sessions: Session[]) => dispatch(actions.loadSessionHistory(sessions))
-
-  const totalDuration = useMemo(
-    () => state.sessions.map(s => s.duration).reduce((acc, val) => acc + val, 0),
-    [state]
-  )
-
-  return {
-    state,
-    totalDuration,
-    addSessionToHistory,
-    loadSessionHistory,
-  }
-})
-
 const reducer = (state: SessionHistoryState, action: Actions): SessionHistoryState => {
   switch (action.type) {
     case 'sessionAddedToHistory':
@@ -73,6 +54,25 @@ const reducer = (state: SessionHistoryState, action: Actions): SessionHistorySta
       return state
   }
 }
+
+export const SessionHistory = createContainer(() => {
+  const [state, dispatch] = useReducer(reducer, initialState)
+  const addSessionToHistory = (timestamp: number, duration: number) =>
+    dispatch(actions.addSessionToHistory(timestamp, duration))
+  const loadSessionHistory = (sessions: Session[]) => dispatch(actions.loadSessionHistory(sessions))
+
+  const totalDuration = useMemo(
+    () => state.sessions.map(s => s.duration).reduce((acc, val) => acc + val, 0),
+    [state]
+  )
+
+  return {
+    state,
+    totalDuration,
+    addSessionToHistory,
+    loadSessionHistory,
+  }
+})
 
 export const useSessionHistory = () => {
   const s = SessionHistory.useContainer()

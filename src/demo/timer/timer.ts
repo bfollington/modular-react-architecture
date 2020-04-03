@@ -44,29 +44,6 @@ type ActionTypes = ReturnType<
   | typeof actions.complete
 >
 
-export const Timer = createContainer(() => {
-  const [state, dispatch] = useReducer(reducer, initialState)
-  const start = (duration: number, onComplete?: Events) =>
-    dispatch(actions.start(duration, onComplete))
-  const cancel = () => dispatch(actions.cancel())
-  const tick = (deltaTime: number) => dispatch(actions.tick(deltaTime))
-  const reset = () => dispatch(actions.reset())
-  const pause = () => dispatch(actions.pause())
-  const unpause = () => dispatch(actions.unpause())
-  const complete = () => dispatch(actions.complete())
-
-  return {
-    state,
-    start,
-    cancel,
-    tick,
-    reset,
-    pause,
-    unpause,
-    complete,
-  }
-})
-
 const reducer = (state: TimerState, action: ActionTypes): TimerState => {
   switch (action.type) {
     case 'started':
@@ -121,5 +98,28 @@ const reducer = (state: TimerState, action: ActionTypes): TimerState => {
       return state
   }
 }
+
+export const Timer = createContainer(() => {
+  const [state, dispatch] = useReducer(reducer, initialState)
+  const start = (duration: number, onComplete?: Events) =>
+    dispatch(actions.start(duration, onComplete))
+  const cancel = () => dispatch(actions.cancel())
+  const tick = (deltaTime: number) => dispatch(actions.tick(deltaTime))
+  const reset = () => dispatch(actions.reset())
+  const pause = () => dispatch(actions.pause())
+  const unpause = () => dispatch(actions.unpause())
+  const complete = () => dispatch(actions.complete())
+
+  return {
+    state,
+    start,
+    cancel,
+    tick,
+    reset,
+    pause,
+    unpause,
+    complete,
+  }
+})
 
 export const useTimer = () => Timer.useContainer().state
