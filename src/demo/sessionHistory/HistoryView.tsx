@@ -2,14 +2,14 @@ import * as React from 'react'
 import { useSessionHistory } from './sessionHistory'
 import { useSessionHistoryManager } from './useSessionHistoryManager'
 import { useSyncProcess, commands as SyncProcess } from './useSyncProcess'
-import { useEventStream } from '../../events'
+import { useEmit } from '../../events'
 
 export const HistoryView = () => {
   useSessionHistoryManager()
   useSyncProcess()
 
   const sessionHistory = useSessionHistory()
-  const { emit } = useEventStream()
+  const emit = useEmit()
   const onSyncRequested = React.useCallback(() => emit(SyncProcess.start()), [emit])
 
   return (

@@ -2074,10 +2074,10 @@
   resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-7.2.1.tgz#2ad4e844175a3738cb9e7064be5ea070b8863a1c"
   integrity sha512-oZ0Ib5I4Z2pUEcoo95cT1cr6slco9WY7yiPpG+RGNkj8YcYgJnM7pXmYmorNOReh8MIGcKSqXyeGjxnr8YiZbA==
 
-"@twopm/use-stream@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@twopm/use-stream/-/use-stream-0.0.1.tgz#3d871d5901874c77b101753b87d94485172be140"
-  integrity sha512-/li9xQ4Su0RCHjT+BLMx4zqye3P1Q3v+vodS8Qk8gfe/gGQTg/Gq5smwLue1EjD60c3P8iSC0j9ctr4zsSK8ew==
+"@twopm/use-stream@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@twopm/use-stream/-/use-stream-0.0.7.tgz#0658d0a8c420c4654a2744757b92862543b94b9a"
+  integrity sha512-N0IjQZXwzYw7CEXc0jAirnMMsYZbLGFxfCqAixsMD+WO6iKSfk0osg1omSYvQjIRxtoTepniPynsn9cQaWXuxA==
 
 "@types/babel__core@^7.1.0":
   version "7.1.3"

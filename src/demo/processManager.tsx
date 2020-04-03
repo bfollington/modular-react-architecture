@@ -1,7 +1,6 @@
-import { useEmit, useStreamCallback } from '@twopm/use-stream/lib'
 import { useState } from 'react'
 import { filter } from 'rxjs/operators'
-import { Events, EventStreamContext } from '../events'
+import { Events, useSubscribe, useEmit } from '../events'
 
 export function useRetry(
   start: Events,
@@ -11,10 +10,9 @@ export function useRetry(
   retryLimit: number
 ) {
   const [retries, setRetries] = useState(0)
-  const emit = useEmit(EventStreamContext)
+  const emit = useEmit()
 
-  useStreamCallback(
-    EventStreamContext,
+  useSubscribe(
     s =>
       s.pipe(filter(x => x.type === start.type)).subscribe(_ => {
         console.log('process started')
@@ -22,8 +20,7 @@ export function useRetry(
     []
   )
 
-  useStreamCallback(
-    EventStreamContext,
+  useSubscribe(
     s =>
       s.pipe(filter(x => x.type === complete.type)).subscribe(_ => {
         console.log('process complete')
@@ -31,8 +28,7 @@ export function useRetry(
     []
   )
 
-  useStreamCallback(
-    EventStreamContext,
+  useSubscribe(
     s =>
       s.pipe(filter(x => x.type === failed.type)).subscribe(x => {
         if (x.type !== 'process/sync/failed') return

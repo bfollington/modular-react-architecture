@@ -1,17 +1,17 @@
 import * as React from 'react'
-import { useEventStream, Events } from '../../events'
+import { Events, useEmit } from '../../events'
 import { useTimer } from './timer'
 import { useTimerManager, commands as Timer } from './useTimerManager'
 
 export const TimerView = () => {
   useTimerManager()
 
-  const { emit } = useEventStream()
-  const useEmit = React.useCallback((e: Events) => () => emit(e), [emit])
-  const onStartTimer = useEmit(Timer.start(10))
-  const onPauseTimer = useEmit(Timer.pause())
-  const onUnpauseTimer = useEmit(Timer.unpause())
-  const onCancelTimer = useEmit(Timer.cancel())
+  const emit = useEmit()
+  const bindEmit = React.useCallback((e: Events) => () => emit(e), [emit])
+  const onStartTimer = bindEmit(Timer.start(10))
+  const onPauseTimer = bindEmit(Timer.pause())
+  const onUnpauseTimer = bindEmit(Timer.unpause())
+  const onCancelTimer = bindEmit(Timer.cancel())
 
   const timer = useTimer()
 

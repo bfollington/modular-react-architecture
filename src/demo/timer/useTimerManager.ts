@@ -1,7 +1,6 @@
-import { useEmit } from '@twopm/use-stream/lib'
 import { useEffect } from 'react'
 import { filter } from 'rxjs/operators'
-import { EventStreamContext, Events, useSubscribe } from '../../events'
+import { Events, useEmit, useSubscribe } from '../../events'
 import { Timer } from './timer'
 
 // This is where business logic related to the timer lives
@@ -35,7 +34,7 @@ export const commands = {
 
 export const useTimerManager = () => {
   const timer = Timer.useContainer()
-  const emit = useEmit(EventStreamContext)
+  const emit = useEmit()
 
   useSubscribe(
     s =>

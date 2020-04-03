@@ -1,22 +1,12 @@
 import React, { useState } from 'react'
-import { Events, EventStreamContext } from '../events'
-import { useStreamCallback } from '@twopm/use-stream'
+import { Events, useSubscribe } from '../events'
 
 export const EventLogger = () => {
   const [events, setEvents] = useState<Events[]>([])
   const [eventCount, setEventCount] = useState(0)
 
-  useStreamCallback(
-    EventStreamContext,
-    s => s.subscribe(ev => setEvents([...events, ev])),
-    [events, setEvents]
-  )
-
-  useStreamCallback(
-    EventStreamContext,
-    s => s.subscribe(_ => setEventCount(eventCount + 1)),
-    [eventCount, setEventCount]
-  )
+  useSubscribe(s => s.subscribe(ev => setEvents([...events, ev])), [events, setEvents])
+  useSubscribe(s => s.subscribe(_ => setEventCount(eventCount + 1)), [eventCount, setEventCount])
 
   return (
     <div>
