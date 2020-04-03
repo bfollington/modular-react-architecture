@@ -44,7 +44,7 @@ type ActionTypes = ReturnType<
   | typeof actions.complete
 >
 
-const useTimerInner = () => {
+export const Timer = createContainer(() => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const start = (duration: number, onComplete?: Events) =>
     dispatch(actions.start(duration, onComplete))
@@ -65,7 +65,7 @@ const useTimerInner = () => {
     unpause,
     complete,
   }
-}
+})
 
 const reducer = (state: TimerState, action: ActionTypes): TimerState => {
   switch (action.type) {
@@ -121,7 +121,5 @@ const reducer = (state: TimerState, action: ActionTypes): TimerState => {
       return state
   }
 }
-
-export const Timer = createContainer(useTimerInner)
 
 export const useTimer = () => Timer.useContainer().state
